@@ -13,6 +13,7 @@ A: Preparation
 2. Port engine to Django App, run engine on server and output image in browser
 3. Deploy
 3. Create simple animation out of simulation results
+4. Add customizing input (change size of planets, velocities etc.)
 
 B: Machine Learning
 
