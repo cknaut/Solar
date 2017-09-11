@@ -6,6 +6,14 @@ Possible addition: Use Machine Learning to create stable conditions enabling ben
 
 Timeline
 
-1. Choose animation framework
-2. Create Simple Running around in circles animation
-3. Code planet selector and placer
+
+A: Preparation
+
+1. Engineer Physics Engine (Simple Hamiltonion mechanics model of gravity), output image of solar system at arbitrary time T
+2. Port engine to Django App, run engine on server and output image in browser
+3. Deploy
+3. Create simple animation out of simulation results
+
+B: Machine Learning
+
+
