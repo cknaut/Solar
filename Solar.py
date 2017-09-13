@@ -6,7 +6,7 @@ import pdb
 from time import time
 
 # containg Planet objects as well as evolving functions and plotting functions
-class Universe():
+class Solar():
 
     def rhs(self, q, D,m):
         """Right hand side
