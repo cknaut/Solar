@@ -30,6 +30,21 @@ class Solar():
             dp[k*self.D:(k+1)*self.D] = dp_k  
         return dp
 
+    def integrate_VV_one_step(self, y0, h, m):
+            r"""Integrate ODE with velocity verlet rule
+
+            Input: y0     ... initial condition
+                   h      ... timestep
+
+            Output:
+                    y ... solution of y after one propagation
+            """
+            y = np.zeros_like(y0)
+            y[0:(self.n_planets*self.D)] = y0[0:(self.n_planets*self.D)] + h*y0[(self.n_planets*self.D):2*(self.n_planets*self.D)]+0.5*h**2*self.rhs(y0[0:(self.n_planets*self.D)],m) 
+            y[(self.n_planets*self.D):2*(self.n_planets*self.D)] = y0[(self.n_planets*self.D):2*(self.n_planets*self.D)] + h/2*(self.rhs(y0[0:(self.n_planets*self.D)],m)+self.rhs(y[0:(self.n_planets*self.D)],m))            
+            self.y_to_planets(y)
+            return y
+
 
     def integrate_VV(self, y0, tStart, tEnd, steps, m):
         r"""Integrate ODE with velocity verlet rule
@@ -55,26 +70,12 @@ class Solar():
         y[0, 0:(N*self.D)] = q_0
         y[0, (N*self.D):2*(N*self.D)] = v_0
         for i in range(steps):
-            y[i+1,0:(N*self.D)] = y[i,0:(N*self.D)] + h*y[i, (N*self.D):2*(N*self.D)]+0.5*h**2*self.rhs(y[i,0:(N*self.D)],m) 
-            y[i+1, (N*self.D):2*(N*self.D)] = y[i, (N*self.D):2*(N*self.D)] + h/2*(self.rhs(y[i,0:(N*self.D)],m)+self.rhs(y[i+1,0:(N*self.D)],m))             
+            y[i+1] = self.integrate_VV_one_step(y[i],h,m)                     
             t[i+1]+=(i+1)*h 
         #############################################################
         return t, y
 
-    def integrate_VV_one_step(self, y0, m):
-            r"""Integrate ODE with velocity verlet rule
 
-            Input: y0     ... initial condition
-       
-
-            Output:
-                    y ... solution of y after one propagation
-            """
-            y = np.zeros_like(y0)
-            y[0:(N*self.D)] = y0[0:(N*self.D)] + h*y0[(N*self.D):2*(N*self.D)]+0.5*h**2*self.rhs(y0[0:(N*self.D)],m) 
-            y[(N*self.D):2*(N*self.D)] = y0[(N*self.D):2*(N*self.D)] + h/2*(self.rhs(y0[0:(N*self.D)],m)+self.rhs(y[0:(N*self.D)],m))            
-            
-            return t, y
 
     # initialize with empty list of planets
     def __init__(self, G=2.95912208286e-4, D=3):
@@ -115,7 +116,7 @@ class Solar():
 
 
     # extracts yvv = [q,v]^T from current planet list
-    def get_y(self):
+    def planet_to_y(self):
 
         # initialize global arrays
         q = np.zeros((self.n_planets,self.D)) # positions
@@ -131,14 +132,20 @@ class Solar():
 
         return np.hstack([q.flatten(), v.flatten()]) # flatten and stack
 
-
-        
+    # updates planets position according to y, inverse function of 
+    def y_to_planets(self, y):
+        q,v = np.hsplit(y,2)
+        for i in range(self.n_planets):
+            planet = self.planets[i]
+            planet.changepos(q[i:i+3])
+            planet.changevel(v[i:i+3])
+           
 
 
     # performs evolution of gravitational *n_planets-body*, endtime *T* and *nrsteps* steps, returns arrays with results
     # TODO: Update Current Position of Planets 
     def evolve(self, T, nrsteps):
-        y = self.get_y()
+        y = self.planet_to_y()
         m = self.get_m()
         t_vv, y_vv = self.integrate_VV(y, 0, T, nrsteps, m)
         return t_vv, y_vv
@@ -155,3 +162,9 @@ class Planet():
         self.initvel = initvel
         self.currentpos = initpos
         self.currentvel = initvel
+
+    def changepos(self, newpos):
+        self.currentpos = newpos
+
+    def changevel(self, newvel):
+        self.currentvel = newvel
