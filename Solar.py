@@ -89,10 +89,10 @@ class Solar():
         # sanity check: number of arrays check out
         if not (n_add == np.shape(masses)[0] and n_add == np.shape(initpos)[0] and n_add == np.shape(initvels)[0]):
              sys.exit("ERROR: Number of planet mismatch in input data") # TODO: Djangofy
-            
-           
-        self.planets.append(Planet(name, mass, initpos, initvel))
-        self.n_planets += 1 
+      
+        for i in range(n_add):
+            self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i]))
+            self.n_planets += 1 
 
 
     # performs evolution of gravitational *n_planets-body*, endtime *T* and *nrsteps* steps, returns arrays with results
