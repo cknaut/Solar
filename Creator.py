@@ -52,7 +52,7 @@ Solar = Solar()
 
 
 
-Solar.add_planet("lol", ms, qs, vs)
+Solar.add_planet(names, ms, qs, vs)
 
 
 '''
