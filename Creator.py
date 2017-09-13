@@ -19,14 +19,6 @@ Solar = Solar()
 Solar.add_planets(names, ms, qs, vs)
 
 
-'''
-Solar.add_planet(namej, mj, qj, vj)
-Solar.add_planet(names, ms, qs, vs)
-Solar.add_planet(nameu, mu, qu, vu)
-Solar.add_planet(namen, mn, qn, vn)
-Solar.add_planet(namep, mp, qp, vp)
-'''
-
 t_vv, y_vv = Solar.evolve(T = 20000, nrsteps = 2000)
 
 
