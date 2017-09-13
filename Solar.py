@@ -10,18 +10,15 @@ from time import time
 class Solar():
 
     def rhs(self, q, m):
-        """Right hand side
-
+        """Right hand side of ODE
         Input: q ...  np.array with positions
-
         Output: dp ... time-derivative of the velocities
         """       
         # Number of bodies
         N = self.n_planets
         # Empty np.arrays for computed data
         dp = np.zeros_like(q)
-        #######################################################
-        #same as rhs, but without * m[k] 
+
         for k in range(N):
             dp_k = np.zeros(self.D)
             for i in range(N):
@@ -31,42 +28,38 @@ class Solar():
                     dp_k += m[i]*qi_qk
             dp_k *= self.G
             dp[k*self.D:(k+1)*self.D] = dp_k  
-        #######################################################
         return dp
 
 
-    def integrate_VV(self, y0, xStart, xEnd, steps, m, flag=False):
+    def integrate_VV(self, y0, tStart, tEnd, steps, m):
         r"""Integrate ODE with velocity verlet rule
 
         Input: y0     ... initial condition
-               xStart ... start x
-               xEnd   ... end   x
-               steps  ... number of steps (h = (xEnd - xStart)/N)
+               tStart ... start t
+               tEnd   ... end   t
+               steps  ... number of steps (h = (tEnd - tStart)/N)
                flag   ... flag == False return complete solution: (phi, phi', t)
                           flag == True  return solution at endtime only: phi(tEnd)
 
-        Output: x ... variable
+        Output: t ... variable
                 y ... solution
         """
-        x = np.zeros(steps+1)
+        t = np.zeros(steps+1)
         y = np.zeros((steps+1, np.size(y0)))
         #############################################################       
         q_0, v_0 = np.hsplit(y0, 2) 
-        x[0]=xStart  
+        t[0]=tStart  
         N = self.n_planets
-        h = (float(xEnd - xStart))/float(steps) 
+        h = (float(tEnd - tStart))/float(steps) 
         #setting initial positions and speed
         y[0, 0:(N*self.D)] = q_0
         y[0, (N*self.D):2*(N*self.D)] = v_0
         for i in range(steps):
             y[i+1,0:(N*self.D)] = y[i,0:(N*self.D)] + h*y[i, (N*self.D):2*(N*self.D)]+0.5*h**2*self.rhs(y[i,0:(N*self.D)],m) 
             y[i+1, (N*self.D):2*(N*self.D)] = y[i, (N*self.D):2*(N*self.D)] + h/2*(self.rhs(y[i,0:(N*self.D)],m)+self.rhs(y[i+1,0:(N*self.D)],m))             
-            x[i+1]+=(i+1)*h 
+            t[i+1]+=(i+1)*h 
         #############################################################
-        if flag:
-            return x[-1], y[-1][:]
-        else:
-            return x, y
+        return t, y
 
 
     # initialize with empty list of planets
@@ -97,34 +90,43 @@ class Solar():
         for i in range(n_add):
             self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i]))
             self.n_planets += 1 
+    
+
+    # extracts mass array from current planet list
+    def get_m(self):
+        m = np.zeros(self.n_planets)
+        for i in range(self.n_planets):
+            m[i] = self.planets[i].mass
+        return m
+
+
+    # extracts yvv = [q,v]^T from current planet list
+    def get_y(self):
+
+        # initialize global arrays
+        q = np.zeros((self.n_planets,self.D)) # positions
+        v = np.zeros((self.n_planets,self.D)) # velocities
+        p = np.zeros((self.n_planets,self.D)) # momentum
+
+
+        # fill arrays
+        for i in range(self.n_planets):
+            planet = self.planets[i]
+            q[i] = planet.currentpos
+            v[i] = planet.currentvel
+
+        return np.hstack([q.flatten(), v.flatten()]) # flatten and stack
+
+
+        
 
 
     # performs evolution of gravitational *n_planets-body*, endtime *T* and *nrsteps* steps, returns arrays with results
     # TODO: Update Current Position of Planets 
     def evolve(self, T, nrsteps):
-
-        # initialize global arrays
-        m = np.zeros(self.n_planets)
-        q0 = np.zeros((self.n_planets,self.D))
-        p0 = np.zeros((self.n_planets,self.D))
-        y0 = np.zeros(self.n_planets*self.D)
-        v0 = np.zeros((self.n_planets,self.D))
-
-        # fill arrays
-        for i in range(self.n_planets):
-            planet = self.planets[i]
-            m[i] = planet.mass
-            q0[i] = planet.currentpos
-            v0[i] = planet.currentvel
-            p0[i] = v0[i]*m[i]
-
-        q0 = q0.flatten() # flatten to 1*(D*n_planets array)
-        p0 = p0.flatten() # flatten to 1*(D*n_planets array)
-        v0 = v0.flatten() # flatten to 1*(D*n_planets array)
-
-        y0 = np.hstack([q0, p0]) # stack to 2*(1*(D*n_planets array)) array
-        y0vv = np.hstack([q0, v0]) # stack to 2*(1*(D*n_planets array)) array  
-        t_vv, y_vv = self.integrate_VV(y0vv, 0, T, nrsteps, m,  False)
+        y = self.get_y()
+        m = self.get_m()
+        t_vv, y_vv = self.integrate_VV(y, 0, T, nrsteps, m)
         return t_vv, y_vv
 
 
