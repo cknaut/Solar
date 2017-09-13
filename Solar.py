@@ -3,6 +3,7 @@ import numpy as np
 import numpy.linalg as linalg
 import matplotlib.pyplot as plt
 import pdb
+import sys
 from time import time
 
 # containg Planet objects as well as evolving functions and plotting functions
@@ -75,8 +76,17 @@ class Solar():
         self.G = G # gravitational constant
         self.n_planets = 0
 
-    # add planet object to list
-    def add_planet(self, name, mass, initpos, initvel):        
+    # add planet objects to list, input np.array of matching size
+    def add_planet(self, names, masses, initpos, initvels):  
+        #pdb.set_trace()
+                 
+        try:
+            n_add = np.shape(names)[0]
+        except IndexError:
+            sys.exit("ERROR: Input np.array to solar._init_") # TODO: Djangofy
+            
+        pdb.set_trace()
+            
         self.planets.append(Planet(name, mass, initpos, initvel))
         self.n_planets += 1 
 
