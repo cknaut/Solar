@@ -31,7 +31,7 @@ class Solar():
         return dp
 
     def integrate_VV_one_step(self, y0, h, m):
-            r"""Integrate ODE with velocity verlet rule
+            """Integrate ODE with velocity verlet rule
 
             Input: y0     ... initial condition
                    h      ... timestep
@@ -42,10 +42,10 @@ class Solar():
             y = np.zeros_like(y0)
             y[0:(self.n_planets*self.D)] = y0[0:(self.n_planets*self.D)] + h*y0[(self.n_planets*self.D):2*(self.n_planets*self.D)]+0.5*h**2*self.rhs(y0[0:(self.n_planets*self.D)],m) 
             y[(self.n_planets*self.D):2*(self.n_planets*self.D)] = y0[(self.n_planets*self.D):2*(self.n_planets*self.D)] + h/2*(self.rhs(y0[0:(self.n_planets*self.D)],m)+self.rhs(y[0:(self.n_planets*self.D)],m))            
-            self.y_to_planets(y)
+            self.y_to_planets(y) # keep track of planet position on every iteration
             return y
 
-
+    # TODO: Possible Speedup: Directly work with planet position as saved in planet classes, without y as intermediary
     def integrate_VV(self, y0, tStart, tEnd, steps, m):
         r"""Integrate ODE with velocity verlet rule
 
@@ -76,9 +76,10 @@ class Solar():
         return t, y
 
 
-
     # initialize with empty list of planets
-    def __init__(self, G=2.95912208286e-4, D=3):
+    # animate is used to invoc matplotlib animation
+    def __init__(self, animate=False, G=2.95912208286e-4, D=3):
+        self.animate = animate
         self.planets = []
         self.D = D # number of spatial dimensions
         self.G = G # gravitational constant
@@ -103,8 +104,8 @@ class Solar():
              sys.exit("ERROR: Number of spatial dimensions mismatch, restrict to D=%d in input data" % self.D) # TODO: Djangofy
       
         for i in range(n_add):
-            self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i]))
-            self.n_planets += 1 
+            self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i], self.animate))
+            self.n_planets += 1             
     
 
     # extracts mass array from current planet list
@@ -144,17 +145,30 @@ class Solar():
 
     # performs evolution of gravitational *n_planets-body*, endtime *T* and *nrsteps* steps, returns arrays with results
     # TODO: Update Current Position of Planets 
-    def evolve(self, T, nrsteps):
+    def evolve(self, T, nrsteps, retarray):
+        """erforms evolution of gravitationa
+
+        Input: T            ... endtime
+               nrsteps      ... number of timesteps
+                retarray    ... if TRUE: return array of planet path, if FALSE: Only update planet objects
+
+        Output:
+            t, y: time and planet path
+        """
         y = self.planet_to_y()
         m = self.get_m()
-        t_vv, y_vv = self.integrate_VV(y, 0, T, nrsteps, m)
-        return t_vv, y_vv
-
+        if retarray:
+            t, y = self.integrate_VV(y, 0, T, nrsteps, m) # TODO: Possible Speedup: Inhibit creation of path arrays altogether, if retarray false
+            return t, y
+        else:
+            self.integrate_VV(y, 0, T, nrsteps, m)
+            return
+            
 
 # contains information about planet
 class Planet():
     
-    def __init__(self, name, mass, initpos, initvel):
+    def __init__(self, name, mass, initpos, initvel, animate=False):
         # Return a Planet object whose name is *name*, mass *mass*, initial position *initpos*, initial velocity *initvel*, current position *currentpos* and current velocity *currentvel*"""
         self.name = name
         self.mass = mass
@@ -162,9 +176,13 @@ class Planet():
         self.initvel = initvel
         self.currentpos = initpos
         self.currentvel = initvel
+        self.animate = animate
 
     def changepos(self, newpos):
         self.currentpos = newpos
+        if self.animate:
+            plt.plot(self.currentpos[0], self.currentpos[1], "o", label=self.name)
+ 
 
     def changevel(self, newvel):
         self.currentvel = newvel
