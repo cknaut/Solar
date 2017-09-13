@@ -9,7 +9,7 @@ from time import time
 # containg Planet objects as well as evolving functions and plotting functions
 class Solar():
 
-    def rhs(self, q, D,m):
+    def rhs(self, q, m):
         """Right hand side
 
         Input: q ...  np.array with positions
@@ -23,14 +23,14 @@ class Solar():
         #######################################################
         #same as rhs, but without * m[k] 
         for k in range(N):
-            dp_k = np.zeros(D)
+            dp_k = np.zeros(self.D)
             for i in range(N):
                 if k != i:
-                    qi_qk = q[i*D:(i+1)*D] - q[k*D:(k+1)*D]
+                    qi_qk = q[i*self.D:(i+1)*self.D] - q[k*self.D:(k+1)*self.D]
                     qi_qk /= linalg.norm(qi_qk)**3
                     dp_k += m[i]*qi_qk
             dp_k *= self.G
-            dp[k*D:(k+1)*D] = dp_k  
+            dp[k*self.D:(k+1)*self.D] = dp_k  
         #######################################################
         return dp
 
@@ -50,18 +50,17 @@ class Solar():
         """
         x = np.zeros(steps+1)
         y = np.zeros((steps+1, np.size(y0)))
-        #############################################################      
-        D=3    
+        #############################################################       
         q_0, v_0 = np.hsplit(y0, 2) 
         x[0]=xStart  
         N = self.n_planets
         h = (float(xEnd - xStart))/float(steps) 
         #setting initial positions and speed
-        y[0, 0:(N*D)] = q_0
-        y[0, (N*D):2*(N*D)] = v_0
+        y[0, 0:(N*self.D)] = q_0
+        y[0, (N*self.D):2*(N*self.D)] = v_0
         for i in range(steps):
-            y[i+1,0:(N*D)] = y[i,0:(N*D)] + h*y[i, (N*D):2*(N*D)]+0.5*h**2*self.rhs(y[i,0:(N*D)],D,m) 
-            y[i+1, (N*D):2*(N*D)] = y[i, (N*D):2*(N*D)] + h/2*(self.rhs(y[i,0:(N*D)],D,m)+self.rhs(y[i+1,0:(N*D)],D,m))             
+            y[i+1,0:(N*self.D)] = y[i,0:(N*self.D)] + h*y[i, (N*self.D):2*(N*self.D)]+0.5*h**2*self.rhs(y[i,0:(N*self.D)],m) 
+            y[i+1, (N*self.D):2*(N*self.D)] = y[i, (N*self.D):2*(N*self.D)] + h/2*(self.rhs(y[i,0:(N*self.D)],m)+self.rhs(y[i+1,0:(N*self.D)],m))             
             x[i+1]+=(i+1)*h 
         #############################################################
         if flag:
@@ -71,13 +70,14 @@ class Solar():
 
 
     # initialize with empty list of planets
-    def __init__(self, G=2.95912208286e-4):
+    def __init__(self, G=2.95912208286e-4, D=3):
         self.planets = []
+        self.D = D # number of spatial dimensions
         self.G = G # gravitational constant
         self.n_planets = 0
 
     # add planet objects to list, input np.array of matching size
-    def add_planet(self, names, masses, initpos, initvels):  
+    def add_planets(self, names, masses, initpos, initvels):  
         #pdb.set_trace()
         
         # sanity check: np.array as input         
@@ -89,6 +89,10 @@ class Solar():
         # sanity check: number of arrays check out
         if not (n_add == np.shape(masses)[0] and n_add == np.shape(initpos)[0] and n_add == np.shape(initvels)[0]):
              sys.exit("ERROR: Number of planet mismatch in input data") # TODO: Djangofy
+
+        # sanity check: number of spatial dimensions
+        if not (self.D == np.shape(initpos)[1] and self.D == np.shape(initvels)[1]):
+             sys.exit("ERROR: Number of spatial dimensions mismatch, restrict to D=%d in input data" % self.D) # TODO: Djangofy
       
         for i in range(n_add):
             self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i]))
@@ -99,14 +103,12 @@ class Solar():
     # TODO: Update Current Position of Planets 
     def evolve(self, T, nrsteps):
 
-        D = 3 # number of spatial dimensions
-
         # initialize global arrays
         m = np.zeros(self.n_planets)
-        q0 = np.zeros((self.n_planets,D))
-        p0 = np.zeros((self.n_planets,D))
-        y0 = np.zeros(self.n_planets*D)
-        v0 = np.zeros((self.n_planets,D))
+        q0 = np.zeros((self.n_planets,self.D))
+        p0 = np.zeros((self.n_planets,self.D))
+        y0 = np.zeros(self.n_planets*self.D)
+        v0 = np.zeros((self.n_planets,self.D))
 
         # fill arrays
         for i in range(self.n_planets):
