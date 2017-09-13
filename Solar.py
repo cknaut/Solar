@@ -61,6 +61,20 @@ class Solar():
         #############################################################
         return t, y
 
+    def integrate_VV_one_step(self, y0, m):
+            r"""Integrate ODE with velocity verlet rule
+
+            Input: y0     ... initial condition
+       
+
+            Output:
+                    y ... solution of y after one propagation
+            """
+            y = np.zeros_like(y0)
+            y[0:(N*self.D)] = y0[0:(N*self.D)] + h*y0[(N*self.D):2*(N*self.D)]+0.5*h**2*self.rhs(y0[0:(N*self.D)],m) 
+            y[(N*self.D):2*(N*self.D)] = y0[(N*self.D):2*(N*self.D)] + h/2*(self.rhs(y0[0:(N*self.D)],m)+self.rhs(y[0:(N*self.D)],m))            
+            
+            return t, y
 
     # initialize with empty list of planets
     def __init__(self, G=2.95912208286e-4, D=3):
