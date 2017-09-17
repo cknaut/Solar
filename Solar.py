@@ -174,15 +174,20 @@ class Planet():
         self.mass = mass
         self.initpos = initpos
         self.initvel = initvel
-        self.currentpos = initpos
-        self.currentvel = initvel
+        self.position = [initpos] # list of 1*3 dimensional numpy array containing position for ervery timestep
+        self.velocity = [initvel] # list of 1*3 dimensional numpy array containing velocity for ervery timestep
         self.animate = animate
         
 
-    def changepos(self, newpos):
-        self.currentpos = newpos
-        if self.animate:
-            plt.plot(self.currentpos[0], self.currentpos[1], "o", label=self.name)
+    def changeposvel(self, newpos, newvel):
+        """updates position and velocity 
+
+        Input: newpos       ... np.array of new position
+               newvel       ... np.array of new velocity
+        """
+        self.position.append(newpos)
+        self.velocity.append(newpos)
+
  
 
     def changevel(self, newvel):
