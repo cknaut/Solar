@@ -7,7 +7,7 @@ import sys
 from time import time
 
 
-# containg Planet objects as well as evolving functions and plotting functions
+# containg list of Planet objects as well as evolving functions and plotting functions
 class Solar():
 
     def rhs(self, q, m):
@@ -69,8 +69,7 @@ class Solar():
 
     # initialize with empty list of planets
     # animate is used to invoc matplotlib animation
-    def __init__(self, animate=False, G=2.95912208286e-4, D=3):
-        self.animate = animate
+    def __init__(self, G=2.95912208286e-4, D=3):
         self.planets = []
         self.D = D  # number of spatial dimensions
         self.G = G  # gravitational constant
@@ -95,7 +94,7 @@ class Solar():
             sys.exit("ERROR: Number of spatial dimensions mismatch, restrict to D=%d in input data" % self.D)  # TODO: Djangofy
 
         for i in range(n_add):
-            self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i], self.animate))
+            self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i]))
             self.n_planets += 1
 
     def plot(self):
@@ -120,7 +119,7 @@ class Solar():
 # contains information about planet
 class Planet():
 
-    def __init__(self, name, mass, initpos, initvel, animate=False):
+    def __init__(self, name, mass, initpos, initvel):
         # Return a Planet object whose name is *name*, mass *mass*, initial position *initpos*, initial velocity *initvel*, current position *currentpos* and current velocity *currentvel*"""
         self.name = name
         self.mass = mass
@@ -128,7 +127,6 @@ class Planet():
         self.initvel = initvel
         self.position = [initpos]  # list of 1*3 dimensional numpy array containing position for ervery timestep
         self.velocity = [initvel]  # list of 1*3 dimensional numpy array containing velocity for ervery timestep
-        self.animate = animate
 
     def changeposvel(self, newpos, newvel):
         """updates position and velocity
