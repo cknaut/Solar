@@ -3,6 +3,7 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
+import pdb
 from Solar import Solar
 
 
@@ -17,11 +18,11 @@ Solar = Solar(True)
 
 # add planets
 Solar.add_planets(names, ms, qs, vs)
+Solar.evolve(20000, 2000)
 
+Solar.plot()
 
-t_vv, y_vv = Solar.evolve(T = 20000, nrsteps = 2000, retarray = True)
-
-
+'''
 fig = plt.figure(figsize=(12,8))
 ax = fig.gca()
 plt.plot(y_vv[:,0], y_vv[:,1], "b-", label="Sonne")
@@ -31,14 +32,14 @@ plt.plot(y_vv[:,9], y_vv[:,10], "c-", label="Uranus")
 plt.plot(y_vv[:,12], y_vv[:,13], "m-", label="Neptun")
 plt.plot(y_vv[:,15], y_vv[:,16], "k-", label="Pluto")
 
-'''
+
 plt.plot(y_vv[-1,0], y_vv[-1,1], "bo")
 plt.plot(y_vv[-1,3], y_vv[-1,4], "go")
 plt.plot(y_vv[-1,6], y_vv[-1,7], "ro")
 plt.plot(y_vv[-1,9], y_vv[-1,10], "co")
 plt.plot(y_vv[-1,12], y_vv[-1,13], "mo")
 plt.plot(y_vv[-1,15], y_vv[-1,16], "ko")
-'''
+
 
 for i in range(6):
     plt.plot(Solar.planets[i].currentpos[0], Solar.planets[i].currentpos[1], "o") # TODO: Updating in Planet Class Falsch, ueberdenken, ob Planet class notwendig
@@ -50,4 +51,4 @@ ax.legend(loc="upper right")
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 plt.savefig("solar_vv.pdf")
-
+'''

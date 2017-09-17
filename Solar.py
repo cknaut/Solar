@@ -31,7 +31,7 @@ class Solar():
             dp[k*self.D:(k+1)*self.D] = dp_k
         return dp
 
-    def integrate_VV_one_step(self, y0, h, m):
+    def integrate_VV_one_step(self, h, m):
             """Integrate ODE with velocity verlet rule
 
             Input: y0     ... initial condition
@@ -40,39 +40,32 @@ class Solar():
             Output:
                     y ... solution of y after one propagation
             """
-            y = np.zeros_like(y0)
-            y[0:(self.n_planets*self.D)] = y0[0:(self.n_planets*self.D)] + h*y0[(self.n_planets*self.D):2*(self.n_planets*self.D)]+0.5*h**2*self.rhs(y0[0:(self.n_planets*self.D)], m)
-            y[(self.n_planets*self.D):2*(self.n_planets*self.D)] = y0[(self.n_planets*self.D):2*(self.n_planets*self.D)] + h/2*(self.rhs(y0[0:(self.n_planets*self.D)], m)+self.rhs(y[0:(self.n_planets*self.D)], m))
-            self.y_to_planets(y)  # keep track of planet position on every iteration
-            return y
 
-    # TODO: Possible Speedup: Directly work with planet position as saved in planet classes, without y as intermediary
-    def integrate_VV(self, y0, tStart, tEnd, steps, m):
-        """Integrate ODE with velocity verlet rule
+            qs = np.array([planet.position[-1] for planet in self.planets]).flatten()
+            vs = np.array([planet.velocity[-1] for planet in self.planets]).flatten()
 
-        Input: y0     ... initial condition
-               tStart ... start t
-               tEnd   ... end   t
-               steps  ... number of steps (h = (tEnd - tStart)/N)
-               flag   ... flag == False return complete solution: (phi, phi', t)
-                          flag == True  return solution at endtime only: phi(tEnd)
+            # Velocity verlet rule
+            q_new = qs + h*vs + 0.5*h**2*self.rhs(qs, m)
+            v_new = vs + h / 2.0 * (self.rhs(qs, m) + self.rhs(q_new, m))
 
-        Output: t ... variable
-                y ... solution
+            # update position and velocities in planet class
+            for i in range(self.n_planets):
+                self.planets[i].changeposvel(q_new[i*self.D:(i * self.D) + self.D], v_new[i*self.D:(i * self.D) + self.D])
+
+    def evolve(self, tEnd, nsteps):
+        """performs evolution of gravitational problem by solving ODE System
+
+        Input: tEnd          ... endtime
+               nsteps        ... number of timesteps
+
         """
-        t = np.zeros(steps+1)
-        y = np.zeros((steps+1, np.size(y0)))
-        q_0, v_0 = np.hsplit(y0, 2)
-        t[0] = tStart
-        N = self.n_planets
-        h = (float(tEnd - tStart))/float(steps)
-        # setting initial positions and speed
-        y[0, 0:(N*self.D)] = q_0
-        y[0, (N*self.D):2*(N*self.D)] = v_0
-        for i in range(steps):
-            y[i+1] = self.integrate_VV_one_step(y[i], h, m)
-            t[i+1] += (i+1)*h
-        return t, y
+        tStart = self.timeline[-1]
+        m = [planet.mass for planet in self.planets]
+        h = (float(tEnd - tStart))/float(nsteps)
+
+        for i in range(nsteps):
+            self.integrate_VV_one_step(h, m)
+            self.timeline.append(tStart + (i+1)*h)
 
     # initialize with empty list of planets
     # animate is used to invoc matplotlib animation
@@ -81,6 +74,7 @@ class Solar():
         self.planets = []
         self.D = D  # number of spatial dimensions
         self.G = G  # gravitational constant
+        self.timeline = [0]  # list of t-values, gets appended by evolving
         self.n_planets = 0
 
     # add planet objects to list, input np.array of matching size
@@ -104,56 +98,23 @@ class Solar():
             self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i], self.animate))
             self.n_planets += 1
 
-    # extracts mass array from current planet list
-    def get_m(self):
-        m = np.zeros(self.n_planets)
-        for i in range(self.n_planets):
-            m[i] = self.planets[i].mass
-        return m
-
-    # extracts yvv = [q,v]^T from current planet list
-    def planet_to_y(self):
-
-        # initialize global arrays
-        q = np.zeros((self.n_planets, self.D))  # positions
-        v = np.zeros((self.n_planets, self.D))  # velocities
-
-        # fill arrays
-        for i in range(self.n_planets):
-            planet = self.planets[i]
-            q[i] = planet.currentpos
-            v[i] = planet.currentvel
-
-        return np.hstack([q.flatten(), v.flatten()])  # flatten and stack
-
-    # updates planets position according to y, inverse function of
-    def y_to_planets(self, y):
-        q, v = np.hsplit(y, 2)
-        for i in range(self.n_planets):
-            planet = self.planets[i]
-            planet.changepos(q[i:i+3])
-            planet.changevel(v[i:i+3])
-
-    # performs evolution of gravitational *n_planets-body*, endtime *T* and *nrsteps* steps, returns arrays with results
-    # TODO: Update Current Position of Planets
-    def evolve(self, T, nrsteps, retarray):
-        """erforms evolution of gravitationa
-
-        Input: T            ... endtime
-               nrsteps      ... number of timesteps
-                retarray    ... if TRUE: return array of planet path, if FALSE: Only update planet objects
-
-        Output:
-            t, y: time and planet path
+    def plot(self):
+        """prints current path of planets
         """
-        y = self.planet_to_y()
-        m = self.get_m()
-        if retarray:
-            t, y = self.integrate_VV(y, 0, T, nrsteps, m)  # TODO: Possible Speedup: Inhibit creation of path arrays altogether, if retarray false
-            return t, y
-        else:
-            self.integrate_VV(y, 0, T, nrsteps, m)
-            return
+        qs = [planet.position for planet in self.planets]
+        fig = plt.figure(figsize=(12, 8))
+        ax = fig.gca()
+        for i in range(self.n_planets):
+            q_planet = np.asarray(qs[i])
+            plt.plot(q_planet[:, 0], q_planet[:, 1], "-", label=self.planets[i].name)
+
+        plt.grid(True)
+        plt.xlim(-50, 50)
+        plt.ylim(-50, 50)
+        ax.legend(loc="upper right")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        plt.savefig("solar_vv.pdf")
 
 
 # contains information about planet
@@ -176,4 +137,4 @@ class Planet():
                newvel       ... np.array of new velocity
         """
         self.position.append(newpos)
-        self.velocity.append(newpos)
+        self.velocity.append(newvel)
