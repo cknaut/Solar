@@ -177,6 +177,7 @@ class Planet():
         self.currentpos = initpos
         self.currentvel = initvel
         self.animate = animate
+        
 
     def changepos(self, newpos):
         self.currentpos = newpos
