@@ -3,8 +3,10 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 
-rom django.http import HttpResponse
+from django.http import HttpResponse
+
+from Solar import Solar
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    return HttpResponse("Hello, world. You're at the solar index.")

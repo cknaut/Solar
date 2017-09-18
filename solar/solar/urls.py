@@ -17,5 +17,5 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^polls/', include('pdf_print.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^print_pdf/', include('pdf_print.urls')),
+    url(r'^admin/', admin.site.urls)]
