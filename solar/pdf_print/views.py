@@ -22,7 +22,7 @@ def index(request):
     # add planets
     Solar_instance.add_planets(names,  ms,  qs,  vs)
     Solar_instance.evolve(20000,  2000)
-    Solar_instance.plot()
+    path = Solar_instance.plot()
     return HttpResponse("Simulation completed.")
 
 def pdf_view(request, path):

@@ -113,7 +113,9 @@ class Solar():
         ax.legend(loc="upper right")
         ax.set_xlabel("x")
         ax.set_ylabel("y")
-        plt.savefig("solar_vv&d.pdf" % int(round(time.time())))  # timestamp
+        path = "solar_vv%d.pdf" %  int(round(time()))
+        plt.savefig(path)  # timestamp
+        return path
 
 
 # contains information about planet
