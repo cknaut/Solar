@@ -113,7 +113,7 @@ class Solar():
         ax.legend(loc="upper right")
         ax.set_xlabel("x")
         ax.set_ylabel("y")
-        path = "solar_vv%d.pdf" %  int(round(time()))
+        path = "solar_vv%d.pdf" % int(round(time()))
         plt.savefig(path)  # timestamp
         return path
 
