@@ -39,6 +39,7 @@ def print_pdf(request, names, ms, qs, vs, Tend, nsteps, cmap):
     import matplotlib.pyplot as plt
     import django
 
+
     # big bang
     Solar = Solar()
 
