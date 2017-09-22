@@ -104,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-ALLOWED_HOSTS = ['ck-solar.herokuapp.com']
+ALLOWED_HOSTS = ['ck-solar.herokuapp.com','127.0.0.1:8000']
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
