@@ -1,5 +1,4 @@
 /Serie
-/env
-/__pycache__
-/solar/solar/settings.py
+/Solar_env
+/__pycache_
 *.pyc
