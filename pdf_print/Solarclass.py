@@ -1,7 +1,6 @@
 # Generalized Hamiltonian N-Body Problem approximated by stoermer Verlet
 import numpy as np
 import numpy.linalg as linalg
-import matplotlib.pyplot as plt
 import pdb
 import sys
 from time import time
@@ -97,6 +96,7 @@ class Solar():
             self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i]))
             self.n_planets += 1
 
+'''
     def plot(self):
         """prints current path of planets
         """
@@ -116,6 +116,7 @@ class Solar():
         path = "solar_vv%d.pdf" % int(round(time()))
         plt.savefig(path)  # timestamp
         return path
+'''
 
 
 # contains information about planet
