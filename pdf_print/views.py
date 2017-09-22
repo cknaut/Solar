@@ -36,8 +36,8 @@ def print_pdf(request, names, ms, qs, vs, Tend, nsteps, cmap):
     """
     from pdf_print.Solarclass import Solar
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-    import matplotlib.pyplot as plt
     matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
     import django
 
     # big bang
