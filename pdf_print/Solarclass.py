@@ -6,6 +6,24 @@ import sys
 from time import time
 
 
+def numpy_to_plotlystring(numpy_array, precision=4):
+    """converts 1Dnumpy array to string readable py plotly.js
+
+    Input:
+            numpy_array         1D-np.array
+            precision           number of decimals kept during conversion (default=8)
+
+    Output:
+           string_array         data of numpy_array in string form "[1.987, 2.234]"
+    """
+    np.set_printoptions(threshold=np.nan)   # enables full printing
+    n_data = np.shape(numpy_array)[0]
+    # prevent array2string to cut string by ofsestting maximal width
+    max_line_width=n_data*(8) # Output Format [#.####, ...], thus 7 chars per entry, added 100 for safekeeping
+    string_array = np.array2string(numpy_array, separator=',', max_line_width=n_data*(8), precision=precision, formatter={'float_kind':lambda x: "%.4f" % x})
+    np.set_printoptions(linewidth=75, threshold=1000)   # restores default
+    return string_array
+
 # containg list of Planet objects as well as evolving functions and plotting functions
 class Solar():
 
@@ -139,3 +157,21 @@ class Planet():
         """
         self.position.append(newpos)
         self.velocity.append(newvel)
+
+    def x_as_plotly(self):
+        """outputs x positions as strin "[1.222, 1.2226, .. ]"
+        """
+        xs = np.asarray(self.position)[:,0]
+        return numpy_to_plotlystring(xs)
+
+    def y_as_plotly(self):
+        """outputs x positions as strin "[1.222, 1.2226, .. ]"
+        """
+        xs = np.asarray(self.position)[:,1]
+        return numpy_to_plotlystring(xs)
+
+    def z_as_plotly(self):
+        """outputs x positions as strin "[1.222, 1.2226, .. ]"
+        """
+        xs = np.asarray(self.position)[:,2]
+        return numpy_to_plotlystring(xs)
