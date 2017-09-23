@@ -19,8 +19,10 @@ var data = [];
 {% for planet in planet_list %}
     var {{ planet.name }} = {
       x: {{ planet.x_as_plotly }}, 
-      y: {{ planet.y_as_plotly }}, 
-      type: 'scatter',
+      y: {{ planet.y_as_plotly }},
+      z: {{ planet.z_as_plotly }}, 
+      type: 'scatter3d',
+      mode: 'lines',
       name: '{{ planet.name }}'
     };
     data.push({{ planet.name }})
@@ -30,5 +32,5 @@ Plotly.newPlot('myDiv', data);
 </script>
 {% endblock %}
 
-
+<script>
 
