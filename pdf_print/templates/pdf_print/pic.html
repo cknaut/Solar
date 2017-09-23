@@ -1,9 +1,17 @@
 {% extends "pdf_print/base.html" %}
 
 
+{% block addhead %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js" type="text/javascript"></script>
+{% endblock %}
+
+
 {% block innercover %}
-<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
 <canvas id="myChart" width="400" height="400"></canvas>
+{% endblock %}
+
+
+{% block addfoot %}
 <script>
 var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
@@ -44,4 +52,3 @@ var myChart = new Chart(ctx, {
 });
 </script>
 {% endblock %}
-
