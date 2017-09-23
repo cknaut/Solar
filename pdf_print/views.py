@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 import numpy as np
 from django.shortcuts import render
-# import pdb
+#  import pdb
 # from django.http import HttpResponse
 
 def cover(request):
