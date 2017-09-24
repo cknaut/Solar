@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.cover, name='cover'),
-    url(r'^pic_output/', views.pic_output)
+    url(r'^pic_output/', views.pic_output, name='pic_output')
 ]
 
