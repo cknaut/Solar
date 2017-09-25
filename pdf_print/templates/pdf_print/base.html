@@ -19,68 +19,77 @@
   </head>
 
   <body>
-
+{% block body %}
     <div class="site-wrapper">
       <div class="site-wrapper-inner">
 
         <div class="cover-container">
-
+        {% block navbar %}
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Solar</h3>
+              <a href={% url "cover" %}> <h3 class="masthead-brand">Solar</h3></a>
               <nav class="nav nav-masthead">
-                <a class="nav-link active" href="{% url "cover" %} ">Static</a>
+                <a class="nav-link " href={% url "static_input" %}">Static</a>
                 <a class="nav-link" href="#">Animation</a>
                 <a class="nav-link" href="#">Machine Learning</a>
               </nav>
             </div>
           </div>
-
-
-          <div class="inner cover" style="color:#333">
+     {% endblock %}
             {% block innercover %}
+          <div class="inner cover" style="color:#333">
 
 <div class="row">
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href={% url "pic_output" %}><img class="card-img-top" src={% static "static_teaser.png" %}></a>
+            <a href={% url "static_input" %}><img class="card-img-top" src={% static "static_teaser.png" %}></a>
             <div class="card-body">
               <h4 class="card-title">
-                <a href={% url "pic_output" %} style="color:#333">Project Static</a>
+                <a href={% url "static_input" %} style="color:#333">Project Static</a>
               </h4>
-              <p class="card-text">This first project will simulate a garvitational N-body problem such as our solar system and provide ad static output as a 2D or 3D graph.</p>
+              <p class="card-text">Simulator of gravitational evolution of our solar system with static output as 2D or 3D graph.</p>
+<br />
+            <div class="alert alert-warning" role="alert">
+              Under developpement
+            </div>
             </div>
           </div>
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" src={% static "comingsoon.png" %} alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#"  style="color:#333">Project Animation</a>
               </h4>
-              <p class="card-text">Extending Project Static, this project will output a (hopefully) beatifully rendered version of the static output (e.g. planets flying around).</p>
+              <p class="card-text">Extension of Project Static, providing beautifully rendered version of simulation output (e.g. planets flying around).</p>
+            <div class="alert alert-primary" role="alert">
+              Coming soon!
+            </div>
             </div>
           </div>
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" src={% static "comingsoon.png" %} alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#" style="color:#333">Project Machine Leaning </a>
               </h4>
-              <p class="card-text">The final stage of the project will aim to find alternative planet orbits yielding at least one habitable planet (according to parameters defined by the model, such as temperature etc) using machine learning. </p>
+              <p class="card-text">Constructing alternative planet orbits maximizing the habitability (as to be defined by the model) by performing genetic algorithm evolution.</p>
+            <div class="alert alert-primary" role="alert">
+              Coming soon!
+            </div>
             </div>
           </div>
         </div>
       </div>
-        {% endblock %}
-          </div>
 
+          </div>
+        {% endblock %}
           <div class="mastfoot">
             <div class="inner">
-              <p>See <a href="https://github.com/cknaut/Solar">Github</a> for more info</p>
+              <p>See <a href="https://github.com/cknaut/Solar"><b>Github</b></a> for more info</p>
 
             </div>
           </div>
@@ -90,7 +99,7 @@
       </div>
 
     </div>
-
+       {% endblock %}
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

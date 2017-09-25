@@ -45,6 +45,7 @@ body {
     background-image: url("/static/Trans_CMB_dsat.png") ; 
   background-repeat: no-repeat;
   background-position: center;
+  background-size: cover;
 
 }
 
