@@ -7,11 +7,39 @@
 {% endblock %}
 
 
-{% block innercover %}
-<div class="inner cover" style="color:#333">
-<div id="myDiv">
-</div>
+{% block body %}
+    <div class="site-wrapper" style="background-image: none">
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+      <div class="masthead clearfix">
+        <div class="inner">
+          <a href={% url "cover" %}> <h3 class="masthead-brand">Solar</h3></a>
+          <nav class="nav nav-masthead">
+            <a class="nav-link active " href={% url "static_input" %}">Static</a>
+            <a class="nav-link" href="#">Animation</a>
+            <a class="nav-link" href="#">Machine Learning</a>
+          </nav>
+        </div>
+      </div>
+
+          <div class="inner cover">
+<div id="myDiv"></div>
+<br />
+<br />
+<br />
+
+
+       </div>
+
+      </div>
+
+    </div>
+
 {% endblock %}
+
+
+
 
 {% block navbar %}
   <div class="masthead clearfix">
@@ -38,12 +66,28 @@ var data = [];
       z: {{ planet.z_as_plotly }}, 
       type: 'scatter3d',
       mode: 'lines',
-      name: '{{ planet.name }}'
+      name: '{{ planet.name }}',
+      hoverinfo :   'name',
+     colorscale: 'Blackbody',
     };
-    data.push({{ planet.name }})
+    data.push({{ planet.name }});
 {% endfor %}
 
-Plotly.newPlot('myDiv', data);
+var layout = {
+    paper_bgcolor: "#333",
+    heigt: "1200",
+    font: {
+    color: "fff"
+    },
+    margin : {
+    l: 0,
+    r: 0,
+    t: 0,
+    b: 0,
+    },
+    };
+
+Plotly.newPlot('myDiv', data, layout);
 </script>
 {% endblock %}
 
