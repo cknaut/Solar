@@ -2,4 +2,4 @@
 /Solar_env
 /__pycache_
 *.pyc
-/solar/keys.py
+environment.vars

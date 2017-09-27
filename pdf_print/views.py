@@ -34,3 +34,5 @@ def static_output(request):
         'planet_list': Solar.planets,
     }
     return render(request, 'pdf_print/pic.html', context)
+
+

@@ -13,7 +13,7 @@
     <!-- Bootstrap core CSS -->
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" type="text/css" href="{% static 'cover.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/cover.css' %}" />
         {% block addhead %}
         {% endblock %}
   </head>
@@ -42,7 +42,7 @@
 <div class="row">
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href={% url "static_input" %}><img class="card-img-top" src={% static "static_teaser.png" %}></a>
+            <a href={% url "static_input" %}><img class="card-img-top" src={% static "images/static_teaser.png" %}></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href={% url "static_input" %} style="color:#333">Project Static</a>
@@ -57,7 +57,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src={% static "comingsoon.png" %} alt=""></a>
+            <a href="#"><img class="card-img-top" src={% static "images/comingsoon.png" %} alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#"  style="color:#333">Project Animation</a>
@@ -71,7 +71,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src={% static "comingsoon.png" %} alt=""></a>
+            <a href="#"><img class="card-img-top" src={% static "images/comingsoon.png" %} alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#" style="color:#333">Project Machine Leaning </a>
