@@ -140,9 +140,10 @@ class Solar():
 # contains information about planet
 class Planet():
 
-    def __init__(self, name, mass, initpos, initvel):
+    def __init__(self, name, mass, initpos, initvel, fix):
         # Return a Planet object whose name is *name*, mass *mass*, initial position *initpos*, initial velocity *initvel*, current position *currentpos* and current velocity *currentvel*"""
         self.name = name
+        self.fix = fix
         self.mass = mass
         self.initpos = initpos
         self.initvel = initvel
