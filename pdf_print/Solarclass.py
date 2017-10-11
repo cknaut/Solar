@@ -67,7 +67,10 @@ class Solar():
 
             # update position and velocities in planet class
             for i in range(self.n_planets):
-                self.planets[i].changeposvel(q_new[i*self.D:(i * self.D) + self.D], v_new[i*self.D:(i * self.D) + self.D])
+                if self.planets[i].fix:
+                    self.planets[i].changeposvel(self.planets[i].initpos, self.planets[i].initvel)
+                else:
+                    self.planets[i].changeposvel(q_new[i*self.D:(i * self.D) + self.D], v_new[i*self.D:(i * self.D) + self.D])
 
     def evolve(self, tEnd, nsteps):
         """performs evolution of gravitational problem by solving ODE System
@@ -94,7 +97,7 @@ class Solar():
         self.n_planets = 0
 
     # add planet objects to list, input np.array of matching size
-    def add_planets(self, names, masses, initpos, initvels):
+    def add_planets(self, names, masses, initpos, initvels, fix):
         # pdb.set_trace()
         # sanity check: np.array as input
         try:
@@ -111,7 +114,7 @@ class Solar():
             sys.exit("ERROR: Number of spatial dimensions mismatch, restrict to D=%d in input data" % self.D)  # TODO: Djangofy
 
         for i in range(n_add):
-            self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i]))
+            self.planets.append(Planet(names[i], masses[i], initpos[i], initvels[i], fix[i]))
             self.n_planets += 1
 
 '''
