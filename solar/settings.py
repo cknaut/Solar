@@ -28,7 +28,7 @@ SECRET_KEY = "lpaskfospdkfpsofk"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG')
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = []
