@@ -2,52 +2,18 @@
 
 {% load static %}
 
+{% block container %}
 
-{% block addhead %}
 
-{% endblock %}
 
-{% block body %}
-    <div class="site-wrapper" style="background-image: none">
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-      <div class="masthead clearfix">
-        <div class="inner">
-          <a href={% url "cover" %}> <h3 class="masthead-brand">Solar</h3></a>
-          <nav class="nav nav-masthead">
-            <a class="nav-link active " href={% url "static_input" %}">Static</a>
-            <a class="nav-link" href="#">Animation</a>
-            <a class="nav-link" href="#">Machine Learning</a>
-          </nav>
-        </div>
-      </div>
-
-          <div class="inner cover">
-          
-<h3>Model Inputs: </h3>
-We are modeling the orbits of the planets of the outer solar system treating it as a gravitationally bound system und numerically solving Hamiltonian's equations of motion. Starting point of the simulation is the specification of the initial conditions of the simulation. That is, we need to specify the position and the velocity of the planets in our model. To do so, we use heliocentric cartesian coordinates, as a length unit we use the astronomical unit AU. You can either choose default values corresponding to some realistic initial conditions or set some of your own. You can even modify the masses of the planets, turning the problem into a generic 5-body problem, where the 5th mass being the sun with initial position at the origin and no initial velocity. 
+     <header class="jumbotron my-4">
+        <h1 class="display-3">Model Inputs:</h1>
+        <p class="lead">We are modeling the orbits of the planets of the outer solar system treating it as a gravitationally bound system und numerically solving Hamiltonian's equations of motion. Starting point of the simulation is the specification of the initial conditions of the simulation. That is, we need to specify the position and the velocity of the planets in our model. To do so, we use heliocentric cartesian coordinates, as a length unit we use the astronomical unit AU. You can either choose default values corresponding to some realistic initial conditions or set some of your own. You can even modify the masses of the planets, turning the problem into a generic 5-body problem, where the 5th mass being the sun with initial position at the origin and no initial velocity. 
+<br /></p>
 <br />
 <br />
-<br />
-<a  href={% url "static_output_tend" 20000 %} class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Run simulation with default values</a>
-
-</div>
-          <div class="mastfoot">
-            <div class="inner">
-              <p>See <a href="https://github.com/cknaut/Solar"><b>Github</b></a> for more info</p>
-
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-{% endblock %}
-{% block addfoot %}
+        <a href={% url "static_output_tend" 20000 %} class="btn btn-primary btn-lg">Run simulation with default values</a>
+      </header>
 
 {% endblock %}
 

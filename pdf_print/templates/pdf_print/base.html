@@ -1,14 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="Can Knaut">
 
-
     <title>Solar</title>
+
 
 <!-- Global Site Tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107204383-1"></script>
@@ -21,100 +23,128 @@
 </script>
 
 
-
-
     <!-- Bootstrap core CSS -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" type="text/css" href="{% static 'assets/cover.css' %}" />
-        {% block addhead %}
-        {% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/heroic-features.css' %}" />
   </head>
 
   <body>
-{% block body %}
-    <div class="site-wrapper">
-      <div class="site-wrapper-inner">
 
-        <div class="cover-container">
-        {% block navbar %}
-          <div class="masthead clearfix">
-            <div class="inner">
-              <a href={% url "cover" %}> <h3 class="masthead-brand">Solar</h3></a>
-              <nav class="nav nav-masthead">
-                <a class="nav-link " href={% url "static_input" %}">Static</a>
-                <a class="nav-link" href="#">Animation</a>
-                <a class="nav-link" href="#">Machine Learning</a>
-              </nav>
-            </div>
-          </div>
-     {% endblock %}
-            {% block innercover %}
-          <div class="inner cover" style="color:#333">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Solar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href={% url "cover" %}>Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href={% url "static_input" %}>Static</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">GR</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Anmiation</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Optimization</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-<div class="row">
-        <div class="col-lg-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href={% url "static_input" %}><img class="card-img-top" src={% static "images/static_teaser.png" %}></a>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a href={% url "static_input" %} style="color:#333">Project Static</a>
-              </h4>
+    <!-- Page Content -->
+    <div class="container">
+     {% block container %}
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-4">
+        <h1 class="display-3">Welcome to Solar!</h1>
+        <p class="lead"></p>
+        <a href={% url "static_input" %} class="btn btn-primary btn-lg">Let's go!</a>
+      </header>
+
+      <!-- Page Features -->
+      <div class="row text-center">
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top" src={% static "images/static_teaser.png" %} alt="">
+               <div class="card-body">
+              <h4 class="card-title">Static</h4>
               <p class="card-text">Simulator of gravitational evolution of our solar system with static output as 2D or 3D graph.</p>
-<br />
-            <div class="alert alert-warning" role="alert">
-              Under developpement
             </div>
+            <div class="alert alert-warning" role="alert">Under development</div>
+            <div class="card-footer">
+              <a href={% url "static_input" %} class="btn btn-primary">Find Out More!</a>
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src={% static "images/comingsoon.png" %} alt=""></a>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top" src={% static "images/comingsoon.png" %} alt="">
             <div class="card-body">
-              <h4 class="card-title">
-                <a href="#"  style="color:#333">Project Animation</a>
-              </h4>
+              <h4 class="card-title">General Relativity</h4>
+              <p class="card-text">Making our simulations "Einstein-proof".</p>
+            </div>
+            <div class="card-footer">
+              <div class="alert alert-primary" role="alert">Coming soon!</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top" src={% static "images/comingsoon.png" %} alt="">
+            <div class="card-body">
+              <h4 class="card-title">Animation</h4>
               <p class="card-text">Extension of Project Static, providing beautifully rendered version of simulation output (e.g. planets flying around).</p>
-            <div class="alert alert-primary" role="alert">
-              Coming soon!
             </div>
+            <div class="card-footer">
+              <div class="alert alert-primary" role="alert">Coming soon!</div>
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <a href="#"><img class="card-img-top" src={% static "images/comingsoon.png" %} alt=""></a>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <img class="card-img-top" src={% static "images/comingsoon.png" %} alt="">
             <div class="card-body">
-              <h4 class="card-title">
-                <a href="#" style="color:#333">Project Machine Learning </a>
-              </h4>
+              <h4 class="card-title">Optimization</h4>
               <p class="card-text">Constructing alternative planet orbits maximizing the habitability (as to be defined by the model) by performing genetic algorithm evolution.</p>
-            <div class="alert alert-primary" role="alert">
-              Coming soon!
-            </div>
+             </div>
+            <div class="card-footer">
+            <div class="alert alert-primary" role="alert">Coming soon!</div>
             </div>
           </div>
         </div>
       </div>
-
-          </div>
-        {% endblock %}
-          <div class="mastfoot">
-            <div class="inner">
-              <p>See <a href="https://github.com/cknaut/Solar"><b>Github</b></a> for more info</p>
-
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
+      <!-- /.row -->
+    {% endblock%}
     </div>
-       {% endblock %}
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+ <p class="m-0 text-center text-white">See <a href="https://github.com/cknaut/Solar"><b>Github</b></a> for more info</p>
+
+
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
@@ -122,7 +152,7 @@
     {% block addfoot %}
     {% endblock %}
 
-
   </body>
+
 </html>
 

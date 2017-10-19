@@ -2,62 +2,20 @@
 {% load static %}
 
 
-{% block addhead %}
- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-{% endblock %}
 
+{% block container %}
 
-{% block body %}
-    <div class="site-wrapper" style="background-image: none">
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-      <div class="masthead clearfix">
-        <div class="inner">
-          <a href={% url "cover" %}> <h3 class="masthead-brand">Solar</h3></a>
-          <nav class="nav nav-masthead">
-            <a class="nav-link active " href={% url "static_input" %}">Static</a>
-            <a class="nav-link" href="#">Animation</a>
-            <a class="nav-link" href="#">Machine Learning</a>
-          </nav>
-        </div>
-      </div>
-
-          <div class="inner cover">
-<div id="myDiv"></div>
-<br />
-<br />
-<br />
-
-
-       </div>
-
-      </div>
-
-    </div>
+<header class="jumbotron my-4">
+<div id="3DPlot"></div>
+</header>
 
 {% endblock %}
 
-
-
-
-{% block navbar %}
-  <div class="masthead clearfix">
-    <div class="inner">
-      <a href={% url "cover" %}> <h3 class="masthead-brand">Solar</h3></a>
-      <nav class="nav nav-masthead">
-        <a class="nav-link active " href={% url "static_input" %}">Static</a>
-        <a class="nav-link" href="#">Animation</a>
-        <a class="nav-link" href="#">Machine Learning</a>
-      </nav>
-    </div>
-  </div>
-{% endblock %}
 
 
 {% block addfoot %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-
 var data = [];
 {% for planet in planet_list %}
     var {{ planet.name }} = {
@@ -87,9 +45,6 @@ var layout = {
     },
     };
 
-Plotly.newPlot('myDiv', data, layout);
+Plotly.newPlot('3DPlot', data, layout);
 </script>
 {% endblock %}
-
-<script>
-
