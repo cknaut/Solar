@@ -4,16 +4,53 @@
 
 {% block container %}
 
-
+{% block addfoot %}
+<script type='text/javascript' src="{% static 'assets/slider.js' %}"></script>
+ <script type='text/javascript'>
+// With JQuery
+$("#ex6").slider();
+$("#ex6").on("slide", function(slideEvt) {
+	$("#ex6SliderVal").text(slideEvt.value);
+});
+</script>
+{% endblock %}
 
      <header class="jumbotron my-4">
-        <h1 class="display-3">Model Inputs:</h1>
-        <p class="lead">We are modeling the orbits of the planets of the outer solar system treating it as a gravitationally bound system und numerically solving Hamiltonian's equations of motion. Starting point of the simulation is the specification of the initial conditions of the simulation. That is, we need to specify the position and the velocity of the planets in our model. To do so, we use heliocentric cartesian coordinates, as a length unit we use the astronomical unit AU. You can either choose default values corresponding to some realistic initial conditions or set some of your own. You can even modify the masses of the planets, turning the problem into a generic 5-body problem, where the 5th mass being the sun with initial position at the origin and no initial velocity. 
+        <h1 class="display-5">Model Setup:</h1>
+        <p class="lead">We are modeling the orbits of the planets of the outer solar system treating it as a gravitationally bound system and numerically solving Hamiltonian's equations of motion.</p>
+<br />
+            <h1 class="display-5">Model Input:</h1>
+
+ <p class="lead"> Starting point of the simulation is the specification of the initial conditions of the simulation. That is, we need to specify the position and the velocity of the planets in our model. To do so, we use heliocentric cartesian coordinates, as a length unit we use the astronomical unit AU. You can either choose default values corresponding to some realistic initial conditions or set some of your own. 
 <br /></p>
 <br />
 <br />
         <a href={% url "static_output_tend" 20000 %} class="btn btn-primary btn-lg">Run simulation with default values</a>
       </header>
+     <div class="row text-center">
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+               <div class="card-body">
+              <h4 class="card-title">Input 1</h4>
+            <div class="form-check form-check-inline">
+
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"> Fixed
+              </label>
+            </div>
+
+
+            <input id="ex6" type="text" data-slider-min="-5" data-slider-max="20" data-slider-step="1" data-slider-value="3"/>
+<span id="ex6CurrentSliderValLabel">Current Slider Value: <span id="ex6SliderVal">3</span></span>
+              <p class="card-text">Form</p>
+            </div>
+            <div class="card-footer">
+              Footer Text.
+            </div>
+          </div>
+        </div>
+      </div>
 
 {% endblock %}
 
