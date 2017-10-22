@@ -1,7 +1,9 @@
 {% extends "pdf_print/base.html" %}
 {% load static %}
 
-
+{% block addheader %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
 
 {% block container %}
 
@@ -14,7 +16,6 @@
 
 
 {% block addfoot %}
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
 var data = [];
 {% for planet in planet_list %}

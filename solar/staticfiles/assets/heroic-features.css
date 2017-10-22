@@ -6,6 +6,9 @@
 
 body {
     padding-top: 54px;
+    background-image: url("/static/images/Trans_CMB_dsat.png") ; 
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 @media (min-width: 992px) {
